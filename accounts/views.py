@@ -7,10 +7,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
-
+from .filters import GroceryFilter
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+
 
 
 def registerPage(request):
@@ -56,7 +57,7 @@ def logoutUser(request):
 
 @login_required(login_url='login')    
 def home(request):
-	item=None  
+	# item=None  
 
 	if request.method == "GET" :
 		date1 = request.GET.get('date1','')
@@ -134,4 +135,11 @@ def add(request):
 	context = {'form': form}
 	return render(request,"add.html",context)		
     
+def search(request):
 
+	date1 = request.GET['date']
+	if date1=='':
+		return redirect('/')
+	item = Item.objects.filter(buyer=request.user, added_date=date1)
+	data = {'item':item}
+	return render(request,"index.html", data)

@@ -11,7 +11,7 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-         <script>
+         {% comment %} <script>
        function filterdate(){
             let date1=document.getElementById("date1").value
             $.ajax({
@@ -31,7 +31,7 @@
     },
 });
        }
-  </script>
+  </script> {% endcomment %}
     </head>
     <body>
         <div class="container mt-5">
@@ -44,16 +44,17 @@
                     <div class="row">
                     {% comment %} <<form action="/" method="POST"> {% endcomment %}
                     
-                   
+                    <form class="row" action="/search" method="get">
                         <div class="col-lg-8">
                             <!-- Date Filtering-->
                             
-                            <input id="date1" type="date" class="form-control">
+                            <input id="date1" type="date" name="date" class="form-control">
 
                         </div>
                         <div class="col-lg-2">
                             <input type="submit" class="btn btn-danger" value="FILTER" onclick="filterdate()">
                         </div>
+                    </form>    
                          {% comment %} </form> {% endcomment %}
                         <div class="col-lg-2">
                            <a href="{% url 'add' %}" class="btn btn-success" value="ADD">ADD</a>
