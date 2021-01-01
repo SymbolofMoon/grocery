@@ -1,0 +1,102 @@
+{% load static %}
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Grocery List</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+         <script>
+       function filterdate(){
+            let date1=document.getElementById("date1").value
+            $.ajax({
+    type: "GET",
+    url: "/",
+    data: {
+        "date1": date1,
+    },
+    success: function(data){
+        console.log("success");
+        console.log(data);
+        window.location = "/"
+    },
+    failure: function(data){
+        console.log("failure");
+        console.log(data);
+    },
+});
+       }
+  </script>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <!-- top -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1>View Grocery List</h1>
+                </div>
+                <div class="col-lg-6 float-right">
+                    <div class="row">
+                    {% comment %} <<form action="/" method="POST"> {% endcomment %}
+                    
+                   
+                        <div class="col-lg-8">
+                            <!-- Date Filtering-->
+                            
+                            <input id="date1" type="date" class="form-control">
+
+                        </div>
+                        <div class="col-lg-2">
+                            <input type="submit" class="btn btn-danger" value="FILTER" onclick="filterdate()">
+                        </div>
+                         {% comment %} </form> {% endcomment %}
+                        <div class="col-lg-2">
+                           <a href="{% url 'add' %}" class="btn btn-success" value="ADD">ADD</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- // top -->
+            <div class="row">
+              <div class="col-lg-10">
+                    <h4>Hello {{request.user}}</h4>
+                </div>
+                <div class="col-lg-2">
+                
+                    <a href="{% url 'logout' %}" class="btn " style="float:right; background-color: #CCCC00; color: white" value="LOGOUT">LOGOUT</a>
+                </div>
+            </div>
+            <!-- Grocery Cards -->
+            <div class="row mt-4">
+                <!--- -->
+                <!-- Loop This -->
+                {% for i in item %}
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                          <h5 class="card-title">{{i.name}}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{i.quantity}}</h6>
+                          {% if 'PENDING' == i.status %}
+                          <p class="text-info">{{i.status}}</p>
+                          {% elif 'NOT AVAILABLE' == i.status %}
+                          <p class="text-danger">{{i.status}}</p>
+                          {% else %}
+                          <p class="text-success">{{i.status}}</p>
+                          {% endif %}
+                           
+                           <a href="{% url 'update' i.id %}" class="btn btn-success" style="float:right; color: yellow;"  value="UPDATE">UPDATE</a>
+                        </div>
+                      </div>
+                </div>
+               {% endfor %}
+               
+            </div>
+        </div>
+    </body>
+</html>
