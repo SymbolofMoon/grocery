@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404, HttpResponseRedirect
 from django.http import HttpResponse
 from .models import Item
 from .forms import ListForm, CreateUserForm
@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 
 from django.contrib import messages
-from .filters import GroceryFilter
+
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -143,3 +143,23 @@ def search(request):
 	item = Item.objects.filter(buyer=request.user, added_date=date1)
 	data = {'item':item}
 	return render(request,"index.html", data)
+
+
+def delete(request,pk):
+	
+	obj = Item.objects.filter(id=pk)
+
+	
+	obj.delete()
+
+	item = Item.objects.filter(buyer=request.user  )
+	context ={'item':item}
+	return redirect("/")
+
+    
+		
+
+	return render(request,"index.html",context)	
+
+
+
